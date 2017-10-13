@@ -9,27 +9,60 @@
 #reentrant
 #idempotent
 #search for activerecords create_or_update OR find_or_create(this one is useful for user email)
-Ingredient.destroy_all
-Cocktail.destroy_all
-Dose.destroy_all
 
-lemon = Ingredient.create(name: "lemon")
-ice = Ingredient.create(name: "ice")
-orange = Ingredient.create(name: "orange")
-gin = Ingredient.create(name: "gin")
-rum = Ingredient.create(name: "rum")
-tonic = Ingredient.create(name: "tonic")
-vodka = Ingredient.create(name: "vodka")
-tequila = Ingredient.create(name: "tequila")
-milk = Ingredient.create(name: "milk")
-kahlua = Ingredient.create(name: "kahlua")
+# here cocktails have to be deleted before ingredient
+# because it will delete all associated doses
+# which then will allow us to delete ingredient
+# because in the model associations, ingredient is not allowed to be deleted
+# if there are exisiting doses associated to it
+puts "start deleting"
+Cocktail.destroy_all
+Ingredient.destroy_all
+puts "finished deleting"
+
+def echo(x)
+  puts "creating: " + "#{x}"
+  return x
+end
+
+def attached(variable)
+  puts variable.photo
+end
+
+url = "http://www.seriouseats.com/recipes/assets_c/2015/04/20150329-sierramadresunrise-cocktail-elana-lepkowski-thumb-1500xauto-421577.jpg"
+# product = Product.new(name: 'Playstation')
+# product.save!
+# product.photo_url = url # Upload happens here
+
+# here you dont need to do echo(Ingredient.create(name: "lemon"))
+# because paraenthesis are optional if it knows which is the argument
+
+lemon = echo Ingredient.create(name: "lemon")
+ice = echo Ingredient.create(name: "ice")
+orange = echo Ingredient.create(name: "orange")
+gin = echo Ingredient.create(name: "gin")
+rum = echo Ingredient.create(name: "rum")
+tonic = echo Ingredient.create(name: "tonic")
+vodka = echo Ingredient.create(name: "vodka")
+tequila = echo Ingredient.create(name: "tequila")
+milk = echo Ingredient.create(name: "milk")
+kahlua = echo Ingredient.create(name: "kahlua")
 
 martini = Cocktail.create(name: "martini")
+martini.photo_url = url
+attached(martini)
 bloody_mary = Cocktail.create(name: "bloody mary")
+bloody_mary.photo_url = url
+attached(bloody_mary)
 sour = Cocktail.create(name: "sour")
+sour.photo_url = url
+attached(sour)
 mojito = Cocktail.create(name: "mojito")
+mojito.photo_url = url
+attached(mojito)
 daiquiri = Cocktail.create(name: "daiquiri")
-
+daiquiri.photo_url = url
+attached(daiquiri)
 
 dose1 = Dose.new(description: "6cl of lemon")
 dose1.ingredient = lemon
@@ -60,3 +93,5 @@ dose6 = Dose.new(description: "10cl of rum")
 dose6.ingredient = rum
 dose6.cocktail = martini
 dose6.save
+
+puts "seed completed"
